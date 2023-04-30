@@ -5,6 +5,7 @@ import 'package:jupiter_clone/screens/reset_password.dart';
 import 'package:jupiter_clone/screens/signup_screen.dart';
 import 'package:jupiter_clone/utils/color_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -16,6 +17,13 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
+  void showError1(){
+    QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        text: 'Invalid Account or Password!',
+        );
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +46,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                reusableTextField("Enter UserName", Icons.person_outline, false,
+                reusableTextField("Enter Email ID", Icons.person_outline, false,
                     _emailTextController),
                 const SizedBox(
                   height: 20,
@@ -58,6 +66,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HomeScreen()));
                   }).onError((error, stackTrace) {
+                    showError1();
                     print("Error ${error.toString()}");
                   });
                 }),

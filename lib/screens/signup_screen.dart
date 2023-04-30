@@ -4,6 +4,7 @@ import 'package:jupiter_clone/widgets/reusable_widget.dart';
 import 'package:jupiter_clone/home_dir/home_screen.dart';
 import 'package:jupiter_clone/utils/color_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 
 import '../widgets/reusable_widget.dart';
 import '../utils/color_utils.dart';
@@ -20,6 +21,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
+  void showSuccess(){
+    QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        title: 'Account created successfully!',
+        text: 'Sign In to continue'
+    );
+  }
+  void showError1(){
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      text: 'Account already exists!',
+    );
+  }
+  void showError(){
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      text: 'Password should contain at least 6 Characters!',
+    );
+  }
+  void showError2(){
+    QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        text: 'The email address is badly formated!',
+        );
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,11 +76,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             padding: EdgeInsets.fromLTRB(20, 120, 20, 0),
             child: Column(
               children: <Widget>[
-                const SizedBox(
-                  height: 20,
-                ),
-                reusableTextField("Enter UserName", Icons.person_outline, false,
-                    _userNameTextController),
+                // const SizedBox(
+                //   height: 20,
+                // ),
+                // reusableTextField("Enter UserName", Icons.person_outline, false,
+                //     _userNameTextController),
                 const SizedBox(
                   height: 20,
                 ),
@@ -74,6 +104,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => SignInScreen()));
                   }).onError((error, stackTrace) {
+                    if(error.toString() == "[firebase_auth/email-already-in-use] The email address is already in use by another account.")showError1();
+                    else if(error.toString() == "[firebase_auth/invalid-email] The email address is badly formatted.")showError2();
+                    else showError();
                     print("Error ${error.toString()}");
                   });
                 })

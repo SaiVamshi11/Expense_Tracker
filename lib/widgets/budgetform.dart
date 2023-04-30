@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../models/ex_category.dart';
+import '../screens/budgetscreen.dart';
+
+class BudgetCategory {
+  String category;
+  double amount;
+
+  BudgetCategory({required this.category, required this.amount});
+}
+class BudgetCategories {
+  static List<BudgetCategory> categories = [];
+}
+
+
 
 class BudgetForm extends StatefulWidget {
   const BudgetForm({Key? key}) : super(key: key);
@@ -23,74 +36,34 @@ class _BudgetFormState extends State<BudgetForm> {
     'Other',
   ];
 
-  // void _saveForm() async {
-  //   final isValid = _formKey.currentState?.validate() ?? false;
-  //   if (!isValid) {
-  //     return;
-  //   }
-  //
-  //   _formKey.currentState?.save();
-  //
-  //   final databaseProvider = DatabaseProvider.dbProvider;
-  //
-  //   // Save budget category-wise
-  //   final category = ExpenseCategory(
-  //     title: _category,
-  //     budget: _amount,
-  //     entries: 0,
-  //     totalAmount: 0.0,
-  //     icon: Icons.category,
-  //   );
-  //
-  //   final result = await databaseProvider.saveBudget(category);
-  //
-  //   if (result != 0) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Budget saved successfully!')),
-  //     );
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Failed to save budget!')),
-  //     );
-  //   }
-  //
-  //   Navigator.of(context).pop();
-  // }
   void _saveForm() {
     final isValid = _formKey.currentState?.validate() ?? false;
+
     if (!isValid) {
       return;
     }
 
     _formKey.currentState?.save();
 
-    // Save budget category-wise
-    switch (_category) {
-      case 'Auto and Transport':
-      // TODO: Save budget for Auto and Transport category using _amount
-        break;
-      case 'Sports':
-      // TODO: Save budget for Sports category using _amount
-        break;
-      case 'Food and Drinks':
-      // TODO: Save budget for Food and Drinks category using _amount
-        break;
-      case 'Entertainment':
-      // TODO: Save budget for Entertainment category using _amount
-        break;
-      case 'Education':
-      // TODO: Save budget for Education category using _amount
-        break;
-      case 'Other':
-      // TODO: Save budget for Other category using _amount
-        break;
-      default:
-      // This should not happen, but just in case
-        throw Exception('Invalid category: $_category');
+    final existingCategoryIndex = BudgetCategories.categories.indexWhere((c) => c.category == _category);
+
+    if (existingCategoryIndex >= 0) {
+      setState(() {
+        BudgetCategories.categories[existingCategoryIndex].amount = _amount;
+      });
+    } else {
+      setState(() {
+        BudgetCategories.categories.add(BudgetCategory(category: _category, amount: _amount));
+      });
     }
 
-    Navigator.of(context).pop();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BudgetScreen(budgetCategories: BudgetCategories.categories)),
+    );
   }
+
+
 
 
 
