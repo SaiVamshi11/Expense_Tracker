@@ -1,4 +1,5 @@
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:jupiter_clone/screens/settings_screen.dart';
 import '../widgets/budgetform.dart';
@@ -9,6 +10,16 @@ import '../widgets/expense_form.dart';
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
   static const name = '/category_screen'; // for routes
+
+  triggerNotification(){
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(id: 10,
+            channelKey: 'basic_channel',
+            title: 'Budget Notification',
+            body: 'Your Budget is exceeded',
+        ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +62,7 @@ class CategoryScreen extends StatelessWidget {
                 isScrollControlled: true,
                 builder: (_) => const BudgetForm(),
               );
+              //triggerNotification();
             },
             backgroundColor: Colors.green[400],
             child: const Icon(Icons.monetization_on),

@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:jupiter_clone/widgets/category_screen/category_card.dart';
@@ -12,6 +13,17 @@ import './screens/signin_screen.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'basic_channel',
+        channelName: 'Basic Notifications',
+        channelDescription: 'Notification channel for budget tests'
+      ),
+    ],
+    debug: true,
+  );
   runApp(ChangeNotifierProvider(
     create: (_) => DatabaseProvider(),
     child: const MyApp(),

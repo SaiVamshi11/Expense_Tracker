@@ -1,7 +1,9 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../constants/icons.dart';
+import '../widgets/budgetform.dart';
 import './ex_category.dart';
 import './expense.dart';
 
@@ -132,7 +134,15 @@ class DatabaseProvider with ChangeNotifier {
     });
   }
   // method to add an expense to database
-
+  triggerNotification(st){
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(id: 10,
+        channelKey: 'basic_channel',
+        title: 'Budget Exceeded',
+        body: 'Your Budget for $st category is exceeded',
+      ),
+    );
+  }
   Future<void> addExpense(Expense exp) async {
     final db = await database;
     await db.transaction((txn) async {
@@ -153,13 +163,26 @@ class DatabaseProvider with ChangeNotifier {
         // add it to '_expenses'
 
         _expenses.add(file);
+
         // notify the listeners about the change in value of '_expenses'
         notifyListeners();
-        // after we inserted the expense, we need to update the 'entries' and 'totalAmount' of the related 'category'
         var ex = findCategory(exp.category);
-
         updateCategory(
             exp.category, ex.entries + 1, ex.totalAmount + exp.amount);
+
+        var budget_check = ex.totalAmount + exp.amount;
+        print(budget_check);
+        var eCI= BudgetCategories.categories.indexWhere((c) => c.category == exp.category);
+        var budget = BudgetCategories.categories[eCI].amount;
+        print(budget);
+        if(budget_check > budget) {
+          print(budget_check);
+          triggerNotification(exp.category);
+        }
+
+        // after we inserted the expense, we need to update the 'entries' and 'totalAmount' of the related 'category'
+
+
       });
     });
   }

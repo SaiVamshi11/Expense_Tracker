@@ -25,7 +25,7 @@ class BudgetForm extends StatefulWidget {
 
 class _BudgetFormState extends State<BudgetForm> {
   final _formKey = GlobalKey<FormState>();
-  String _category = 'Auto and Transport';
+  String _category = 'Other';
   double _amount = 0.0;
   final List<String> _categoryOptions = [
     'Auto and Transport',
