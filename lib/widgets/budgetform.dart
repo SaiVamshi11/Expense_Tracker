@@ -28,9 +28,9 @@ class _BudgetFormState extends State<BudgetForm> {
   String _category = 'Other';
   double _amount = 0.0;
   final List<String> _categoryOptions = [
-    'Auto and Transport',
+    'Transport',
     'Sports',
-    'Food and Drinks',
+    'Food',
     'Entertainment',
     'Education',
     'Other',
